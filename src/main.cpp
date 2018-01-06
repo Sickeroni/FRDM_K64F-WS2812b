@@ -20,6 +20,20 @@ int main()
     BOARD_InitDebugConsole();
     // Disable SYSMPU.
     base->CESR &= ~SYSMPU_CESR_VLD_MASK; */
+
+    // enable CLOCKS
+
+    // enable GPIO
+
+    // enable SPI
+
+    // enable FTM I
+
+    // enable FTM II
+
+    // START
+
+
     while (1)
     {
 
