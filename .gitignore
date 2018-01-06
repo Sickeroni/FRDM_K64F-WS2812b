@@ -1,0 +1,17 @@
+# Ignore Generated and Compiled stuff
+*/*.elf
+*/CMakeFiles/
+*/Makefile
+*/cmake_install.cmake
+*/CMakeCache.txt
+*/*.ninja
+
+# remove clionstuff
+.idea/
+cmake-build-debug/
+
+# remove Visual Studio Code 
+.vscode/
+
+# remove dep ksdk
+dep/ksdk
