@@ -1,5 +1,13 @@
+// kinetis SDK header
 #include <MK64F12.h>
 #include "fsl_device_registers.h"
+
+// kvasir header
+#include "Chip/MK64F12.hpp"
+
+// local header
+#include "gpio.hpp"
+
 
 extern "C" {
 
@@ -22,9 +30,10 @@ int main()
     base->CESR &= ~SYSMPU_CESR_VLD_MASK; */
 
     // enable CLOCKS
-
+    apply(gpio::clock_init);
     // enable GPIO
-
+    apply(write(Kvasir::PortdPcr2::MuxValC::v001)); // set Pin to gpio..
+    apply(gpio::init);
     // enable SPI
 
     // enable FTM I
