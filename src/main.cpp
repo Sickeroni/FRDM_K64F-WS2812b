@@ -31,6 +31,10 @@ int main()
 
     // enable FTM II
 
+    // DMA for values (FTM I)
+
+    // DMA for modechange (FTM II)
+
     // START
 
 
