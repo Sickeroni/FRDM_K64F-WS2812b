@@ -43,7 +43,8 @@ int main()
 
     // enable FTM for output (duty cycle 0%), FTM3_CH2
     apply(write(Kvasir::PortdPcr2::MuxValC::v100)); // set Pin to (disabled) FTM3_CH2
-    
+    apply(write(Kvasir::Ftm3Sc::ClksValC::v01));
+    apply(set(Kvasir::Ftm3C2sc::elsa),set(Kvasir::Ftm3C2sc::msa));
     // enable FTM I
 
     // enable FTM II
@@ -57,8 +58,11 @@ int main()
 
     while (1)
     {
-        //apply(write(Kvasir::PortdPcr2::MuxValC::v001)); // set Pin to gpio
-        //apply(write(Kvasir::PortdPcr2::MuxValC::v010)); // set Pin to SPI0_Output
-        //apply(write(Kvasir::PortdPcr2::MuxValC::v100)); // set Pin to (disabled) FTM3_CH2
+ //       apply(write(Kvasir::PortdPcr2::MuxValC::v001)); // set Pin to gpio
+ //       asm("NOP");
+ //       apply(write(Kvasir::PortdPcr2::MuxValC::v010)); // set Pin to SPI0_Output
+ //       asm("NOP");
+ //       apply(write(Kvasir::PortdPcr2::MuxValC::v100)); // set Pin to (disabled) FTM3_CH2
+ //       asm("NOP");
     }
 }
