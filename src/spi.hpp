@@ -8,8 +8,9 @@ namespace spi {
             clear(Kvasir::Spi0Mcr::mdis), // enable module (set 0 to module_disable)
             set(Kvasir::Spi0Mcr::halt), // halt everything
             set(Kvasir::Spi0Mcr::mstr),  // set mastermode
-            write(Kvasir::Spi0Ctar0::PbrValC::v10),
-            write(Kvasir::Spi0Ctar0::br,Kvasir::Register::value<2>())
+            write(Kvasir::Spi0Ctar0::PbrValC::v10), // divider Pbr is 5
+            write(Kvasir::Spi0Ctar0::br,Kvasir::Register::value<2>()), // divider br is 6
+            write(Kvasir::Spi0Ctar0::CphaValC::v1)    // phaseshift is on. (without: first bit is half length)
     );
     auto constexpr start = clear(Kvasir::Spi0Mcr::halt); // remove halt
 

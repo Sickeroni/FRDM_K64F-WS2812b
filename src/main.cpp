@@ -11,6 +11,7 @@
 // local header
 #include "gpio.hpp"
 #include "spi.hpp"
+#include "ftm.hpp"
 
 extern "C" {
 
@@ -24,15 +25,12 @@ int main(void); // needed here to be callable in main.c (otherwise name mangelin
 
 int main()
 {
-
-    SYSMPU_Type *base = SYSMPU;
     BOARD_BootClockRUN();
-    // Disable SYSMPU.
-   //base->CESR &= ~SYSMPU_CESR_VLD_MASK;
 
     // enable CLOCKS
     apply(gpio::clock_init,
-    spi::clock_init);
+    spi::clock_init,
+    ftm::clock_init);
 
     // enable GPIO
     // apply(write(Kvasir::PortdPcr2::MuxValC::v001)); // set Pin to gpio
@@ -41,10 +39,11 @@ int main()
     // enable SPI
     apply(spi::init);
     apply(spi::start);
-    apply(write(Kvasir::PortdPcr2::MuxValC::v010)); // set Pin to SPI
-    apply(write(Kvasir::PortdPcr1::MuxValC::v010)); // set Pin to SPI clock
-    apply(write(Kvasir::Spi0Mcr::ContsckeValC::v1));
+    //apply(write(Kvasir::PortdPcr1::MuxValC::v010)); // set Pin to SPI clock
 
+    // enable FTM for output (duty cycle 0%), FTM3_CH2
+    apply(write(Kvasir::PortdPcr2::MuxValC::v100)); // set Pin to (disabled) FTM3_CH2
+    
     // enable FTM I
 
     // enable FTM II
@@ -58,6 +57,8 @@ int main()
 
     while (1)
     {
-
+        //apply(write(Kvasir::PortdPcr2::MuxValC::v001)); // set Pin to gpio
+        //apply(write(Kvasir::PortdPcr2::MuxValC::v010)); // set Pin to SPI0_Output
+        //apply(write(Kvasir::PortdPcr2::MuxValC::v100)); // set Pin to (disabled) FTM3_CH2
     }
 }
