@@ -160,12 +160,12 @@ add_executable(${PROJECT_NAME}.elf
 		"${PROJECT_DEPENDENCY_DIR}/ksdk/devices/MK64F12/gcc/startup_MK64F12.S"
 
 		"${PROJECT_SOURCE_DIR}/main.cpp"
-
+		"${PROJECT_SOURCE_DIR}/clock_config.c"
 #		"${PROJECT_DEPENDENCY_DIR}/ksdk/devices/MK64F12/drivers/fsl_gpio.c"
 #		"${PROJECT_DEPENDENCY_DIR}/ksdk/devices/MK64F12/drivers/fsl_smc.c"
 #		"${PROJECT_DEPENDENCY_DIR}/ksdk/devices/MK64F12/drivers/fsl_uart.c"
 #		"${PROJECT_DEPENDENCY_DIR}/ksdk/devices/MK64F12/drivers/fsl_sim.c"
-#		"${PROJECT_DEPENDENCY_DIR}/ksdk/devices/MK64F12/drivers/fsl_clock.c"
+		"${PROJECT_DEPENDENCY_DIR}/ksdk/devices/MK64F12/drivers/fsl_clock.c"
 #		"${PROJECT_DEPENDENCY_DIR}/ksdk/devices/MK64F12/drivers/fsl_enet.c"
 #		"${PROJECT_DEPENDENCY_DIR}/ksdk/devices/MK64F12/drivers/fsl_pit.c"
 #		"${PROJECT_DEPENDENCY_DIR}/ksdk/devices/MK64F12/drivers/fsl_flash.c"
