@@ -78,8 +78,8 @@ int main()
     //set_dmamux();
 
 
-    //char PinMuxValues[3] = {1U,2U,4U};
-    char PinMuxValues[3] = {1U,1U,1U};
+    char PinMuxValues[3] = {1U,2U,4U};
+    //char PinMuxValues[3] = {2U,2U,2U};
     //char PinMuxValues[3] = {4U,4U,4U};
 
     apply(write(Kvasir::SimScgc6::DmamuxValC::v1,
@@ -108,7 +108,7 @@ int main()
     //apply(write(Kvasir::PortdPcr2::MuxValC::v100)); // set Pin to FTM3_CH2 (disabled)
     apply(write(Kvasir::DmaErq::Erq1ValC::v1));
     apply(write(Kvasir::Spi0Ctar0::fmsz,Kvasir::Register::value<7>()));
-    apply(write(Kvasir::Spi0Pushr::txdata,Kvasir::Register::value<0xAA>()));
+    apply(write(Kvasir::Spi0Pushr::txdata,Kvasir::Register::value<0xAA>()), write(Kvasir::Spi0Pushr::EoqValC::v1));
     while (1)
     {
 
