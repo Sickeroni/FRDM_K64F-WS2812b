@@ -12,6 +12,7 @@
 #include "gpio.hpp"
 #include "spi.hpp"
 #include "ftm.hpp"
+#include "pit.hpp"
 
 extern "C" {
 
@@ -82,6 +83,32 @@ struct led_t {
     uint8_t B;
 };
 
+void init_pit() // set start value to 1kHz, depending on the clock // still has to be set
+{
+    apply(write(Kvasir::PitMcr::MdisValC::v1));
+
+    apply(write(Kvasir::PitLdval0::tsv, Kvasir::Register::value<(5)-1>()),   //startvalue <- 3fache clock für pinchange
+          write(Kvasir::PitLdval1::tsv, Kvasir::Register::value<(8*3)-1>()),   //startvalue <- anzahl bytes
+          write(Kvasir::PitLdval2::tsv, Kvasir::Register::value<(3)-1>()));  //startvalue <- anzahl leds
+
+    apply(write(Kvasir::PitTctrl0::ChnValC::v1,
+                Kvasir::PitTctrl1::ChnValC::v1,
+                Kvasir::PitTctrl2::ChnValC::v1,
+
+                Kvasir::PitTctrl0::TieValC::v0,
+                Kvasir::PitTctrl1::TieValC::v0,
+                Kvasir::PitTctrl2::TieValC::v0,
+
+                Kvasir::PitTctrl0::TenValC::v1,
+                Kvasir::PitTctrl1::TenValC::v1,
+                Kvasir::PitTctrl2::TenValC::v1
+
+    ));
+    apply(write(Kvasir::PitMcr::MdisValC::v0));
+}
+char PinMuxValues[3] = {1U,2U,4U};
+led_t Led_Framebuffer[] = {led_t{0x00,0x00,0x7F},led_t{0x00, 0x7F, 0x00},led_t{0x7F, 0x00, 0x00}};
+
 int main()
 {
     BOARD_BootClockRUN();
@@ -89,7 +116,8 @@ int main()
     // enable CLOCKS
     apply(gpio::clock_init,
     spi::clock_init,
-    ftm::clock_init);
+    ftm::clock_init,
+    pit::clock_init);
 
     // enable GPIO
     // apply(write(Kvasir::PortdPcr2::MuxValC::v001)); // set Pin to gpio
@@ -112,9 +140,8 @@ int main()
     //set_dmamux();
 
 
-    //char PinMuxValues[3] = {1U,2U,4U};
-    led_t Led_Framebuffer[] = {led_t{0xAA,0x55,0xAA},led_t{0x55,0xAA,0x55},led_t{0xAA,0x55,0xAA}};
-    char PinMuxValues[3] = {2U,2U,2U};
+
+    //char PinMuxValues[3] = {2U,2U,2U};
     //char PinMuxValues[3] = {4U,4U,4U};
 
     apply(write(Kvasir::SimScgc6::DmamuxValC::v1,
@@ -125,17 +152,17 @@ int main()
     set_dma2<3>(reinterpret_cast<unsigned int>(&Led_Framebuffer[0]));
 
 
-    //ftm3
+//    ftm3
 
         apply(write(Kvasir::Ftm3C0sc::DmaValC::v1, // enable dma request :)
                     Kvasir::Ftm3C0sc::ChieValC::v1),
-              set(Kvasir::Ftm3C0sc::elsa, Kvasir::Ftm3C0sc::elsb,
+              set(Kvasir::Ftm3C0sc::elsb,
                   Kvasir::Ftm3C0sc::msa)
         ); // channel interupt for dma
         apply(write(Kvasir::Ftm3Mod::mod, Kvasir::Register::value<(5)-1>()));
         apply(write(Kvasir::Ftm3Sc::ClksValC::v01, Kvasir::Ftm3Sc::PsValC::v000)); // start through clock (system clock)
 
-
+/*
 
     //ftm2
     apply(write(Kvasir::Ftm2C0sc::DmaValC::v1, // enable dma request :)
@@ -145,6 +172,10 @@ int main()
     ); // channel interupt for dma
     apply(write(Kvasir::Ftm2Mod::mod, Kvasir::Register::value<(5*8*3)-1>()));
     apply(write(Kvasir::Ftm2Sc::ClksValC::v01, Kvasir::Ftm2Sc::PsValC::v000)); // start through clock (system clock)
+*/
+
+
+
 
     // enable FTM II
 
@@ -153,30 +184,19 @@ int main()
 
     // START
     //apply(write(Kvasir::PortdPcr2::MuxValC::v100)); // set Pin to FTM3_CH2 (disabled)
-    apply(write(Kvasir::DmaErq::Erq1ValC::v1));
-    apply(write(Kvasir::DmaErq::Erq2ValC::v1));
+    apply(write(Kvasir::DmaErq::Erq1ValC::v1),write(Kvasir::DmaErq::Erq2ValC::v1));
     apply(write(Kvasir::Spi0Ctar0::fmsz,Kvasir::Register::value<7>()));
 
     (*(volatile uint8_t *) (0x40021001U)) = (1 << 7) + 32;  // Set dma 1 mux to source32 aka FTM3 Channel 0
-    (*(volatile uint8_t *) (0x40021002U)) = (1 << 7) + 30;  // Set dma 2 mux to source30 aka FTM2 Channel 0
+    //(*(volatile uint8_t *) (0x40021002U)) = (1 << 7) + 30;  // Set dma 2 mux to source30 aka FTM2 Channel 0
 
 
-apply(write(Kvasir::PortdPcr2::MuxValC::v010));
+//apply(write(Kvasir::PortdPcr2::MuxValC::v010));
 
-    //apply(write(Kvasir::Spi0Pushr::txdata,Kvasir::Register::value<0xAA>()));
+    apply(write(Kvasir::Spi0Pushr::txdata,Kvasir::Register::value<0xAA>()));
 
     while (1)
     {
-      //  apply(write(Kvasir::Spi0Pushr::txdata,i));
-       // i++;
- //       apply(write(Kvasir::PortdPcr2::MuxValC::v001)); // set Pin to gpio
-        //    (*(volatile uint8_t *)(0x4004C009)) = 0x1U;
-        //(*(volatile uint8_t *)(0x4004C009)) = 0x2U;
-        //(*(volatile uint8_t *)(0x4004C009)) = 0x4U;
- //       asm("NOP");
- //       apply(write(Kvasir::PortdPcr2::MuxValC::v010)); // set Pin to SPI0_Output
- //       asm("NOP");
- //       apply(write(Kvasir::PortdPcr2::MuxValC::v100)); // set Pin to (disabled) FTM3_CH2
- //       asm("NOP");
+
     }
 }
