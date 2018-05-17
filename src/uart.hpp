@@ -1,7 +1,7 @@
-namespace spi {
+namespace uart {
     // init all the clocks
     auto constexpr clock_init = write(
-            Kvasir::SimScgc6::Spi0ValC::v1  //enable SPI0
+            Kvasir::SimScgc4::Uart0ValC::v1 //enable Uart0
     );
 
     auto constexpr init = Kvasir::MPL::list(

@@ -13,7 +13,7 @@ namespace gpio {
             write(Kvasir::PortdPcr2::PeValC::v1,    // Pull-Resistor enable
                   Kvasir::PortdPcr2::PsValC::v1),   // Pull-Resistor ist Pullup
             write(Kvasir::PtdPddr::pdd, Kvasir::Register::value<(1<<2)>()),    // GPIO is Output
-            write(Kvasir::PtdPsor::ptso,Kvasir::Register::value<(1<<2)>()) // Pin D2 set (logical 1) in setregister
+            write(Kvasir::PtdPcor::ptco,Kvasir::Register::value<(1<<2)>()) // Pin D2 set (logical 1) in setregister
                 );
 
 }
