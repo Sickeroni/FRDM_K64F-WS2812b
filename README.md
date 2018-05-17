@@ -11,3 +11,8 @@ between SPI-Datapackats there are short gaps.  Because of this the SPI-signal de
 # Possible Solutions
 * replace SPI with I2S
 * trying to find a SPI-configuration (config gap and clock) that is compatible. (Part of the output that is a gap can maybe be hidden in a different Pinstate) 
+
+# Helpful Links/Informations
+* That Project uses Kinetis SDK (should be replaced somewhere in the future) https://www.nxp.com/support/developer-resources/reference-designs/software-development-kit-for-kinetis-mcus:KINETIS-SDK
+* Project uses Kvasir http://Kvasir.io (will be maybe replaced with alloy-hal http://alloy-hal.io/)
+* Some Explanations can be found on a presentation https://github.com/Sickeroni/pottcpp_slides-How_To_Optimize_A_Shitty_Light-Saber 
